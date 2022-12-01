@@ -5,8 +5,14 @@ const password = process.argv[2]
 const url = `mongodb+srv://main:${password}@cluster0.j59yet3.mongodb.net/?retryWrites=true&w=majority`
 
 const personSchema = new mongoose.Schema({
-	name: String,
-	number: String,
+	name: {
+		type: String,
+		required: true,
+	}
+	number: {
+		type: String,
+		required: true,
+	}
 })
 
 const Person = mongoose.model('Person', personSchema)
