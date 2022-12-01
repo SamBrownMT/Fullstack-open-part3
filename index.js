@@ -14,29 +14,6 @@ app.use(express.static('build'))
 app.use(cors())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :content'))
 
-let list = [
-    { 
-      "id": 1,
-      "name": "Arto Hellas", 
-      "number": "040-123456"
-    },
-    { 
-      "id": 2,
-      "name": "Ada Lovelace", 
-      "number": "39-44-5323523"
-    },
-    { 
-      "id": 3,
-      "name": "Dan Abramov", 
-      "number": "12-43-234345"
-    },
-    { 
-      "id": 4,
-      "name": "Mary Poppendieck", 
-      "number": "39-23-6423122"
-    }
-]
-
 app.get('/api/persons',(request,response) => {
 	Person.find({}).then(people => {
 		response.json(people)
@@ -44,8 +21,6 @@ app.get('/api/persons',(request,response) => {
 })
 
 app.post('/api/persons', (request,response) => {
-	const RandId = Math.floor(Math.random() * 100000);
-
 	const person = request.body
 
 	if (!person.name || !person.number) {
@@ -54,18 +29,14 @@ app.post('/api/persons', (request,response) => {
 		})
 	}
 
-	if (list.filter(entry => entry.name === person.name)
-		.length !== 0) {
-		return response.status(400).json({
-			error: 'name already taken'
-		})
-	}
+	const newPerson = new Person({
+		name: person.name,
+		number: person.number,
+	})
 
-	person.id = RandId 
-
-	list = list.concat(person)
-
-	response.json(person)
+	newPerson.save().then(savedPerson => {
+		response.json(savedPerson)
+	})
 })
 
 app.get('/api/persons/:id',(request,response) => {
