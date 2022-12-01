@@ -38,7 +38,9 @@ let list = [
 ]
 
 app.get('/api/persons',(request,response) => {
-	response.json(list)
+	Person.find({}).then(people => {
+		response.json(people)
+	})
 })
 
 app.post('/api/persons', (request,response) => {
