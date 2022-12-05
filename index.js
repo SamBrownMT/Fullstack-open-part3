@@ -77,8 +77,12 @@ app.delete('/api/persons/:id', (request,response) => {
 })
 
 app.get('/info',(request,response) => {
-	response.send(`<h1>Phonebook has info for ${list.length} people</h1>
+	Person.countDocuments({})
+		.then(result => {
+			response.send(`<h1>Phonebook has info for ${result} people</h1>
 			<h1>${new Date()}</h1>`)
+		})
+	
 })
 
 const errorHandler = (error, request, response, next) => {
