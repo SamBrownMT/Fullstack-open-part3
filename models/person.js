@@ -5,7 +5,7 @@ const url = process.env.MONGODB_URI
 console.log('connecting to', url)
 
 mongoose.connect(url)
-  .then(result => {
+  .then(() => {
     console.log('connected to MongoDB')
   })
   .catch((error) => {
@@ -13,7 +13,7 @@ mongoose.connect(url)
   })
 
 const numberValidator = (phoneNumber) => {
-	phoneNumberArray = phoneNumber.split("-")
+	const phoneNumberArray = phoneNumber.split("-")
 
 	return (phoneNumberArray.every((number) => {
 		return number.match(/[^0-9]/) === null
