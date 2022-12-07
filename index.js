@@ -29,16 +29,28 @@ app.post('/api/persons', (request,response, next) => {
 		})
 	}
 
-	const newPerson = new Person({
-		name: person.name,
-		number: person.number,
+  Person.exists({name:person.name}, (error,entry) => {
+		if (entry) {
+			return response.status(400).json({
+				error: 'name is already in phonebook'
+			})
+		} else {
+
+		const newPerson = new Person({
+			name: person.name,
+			number: person.number,
+		})
+
+		newPerson.save(
+			{new: true, runValidators: true, context: 'query'})
+			.then(savedPerson => {
+				response.json(savedPerson)
+			})
+			.catch(error => next(error))
+		}
 	})
 
-	newPerson.save()
-		.then(savedPerson => {
-			response.json(savedPerson)
-		})
-		.catch(error => next(error))
+
 })
 
 app.get('/api/persons/:id',(request,response,next) => {
